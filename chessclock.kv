@@ -1,0 +1,167 @@
+Screen:
+    ScreenManager:
+        TimeChangeWindow:
+            name: 'time_change_window'
+        MainWindow:
+            name: 'main_window'
+
+<MainWindow>:
+    button_top: button_top
+    button_bottom: button_bottom
+    name: 'main_window'
+
+    MDBoxLayout:
+        md_bg_color: [0.4,0.2,0.1,1]
+
+        orientation: 'vertical'
+        padding: 5
+        spacing: 5
+        
+        MDFillRoundFlatButton:
+            id: button_top
+            text: ''
+            text_color: [0.1, 0.1, 0.1, 1]
+            font_size: 100
+            roboto: True
+            size_hint: 1, 1
+            pos_hint: {'center_x': .5, 'center_y': 0.5}
+            canvas.before:
+
+                PushMatrix
+                Rotate:
+                    angle: 180
+                    origin: self.center
+            canvas.after:
+                PopMatrix
+            on_release: root.switch_time_top()
+            border: (2,2,2,2)
+
+        MDBoxLayout:
+            orientation: 'horizontal'
+            padding: 5
+            spacing: 5
+            md_bg_color: [0.2,0.2,0.2,0.2]
+
+            
+            MDIconButton:
+                id: pause_resume_button
+                icon: 'pause'
+                user_font_size: "80sp"
+                on_release: root.pause_resume_func()
+                disabled: True
+                border: (10,10,10,10)
+                pos_hint: {'center_x':0.5, 'center_y':0.5}
+
+            MDIconButton:
+                id: reset_button
+                icon: 'replay'
+                user_font_size: "80sp"
+                on_release: root.reset()
+                disabled: True
+                border: (10,10,10,10)
+                pos_hint: {'center_x': 0.5, 'center_y':0.5}
+                    
+            MDIconButton:
+                id: time_screen
+                icon: 'cog'
+                user_font_size: "80sp"
+                on_release: 
+
+                    root.manager.transition.direction = "right"
+                    root.manager.current = 'time_change_window'
+
+                    app.TimeChangeWindow.current_time_top = button_top.text
+                    app.TimeChangeWindow.current_time_bottom = button_bottom.text
+
+                disabled: False
+                border: (10,10,10,10)
+                pos_hint: {'center_y': 0.5}
+                #treba opisat aj toto ze sa snazim urovnat tieto ikony v strede a tym odstranit tie critial errori
+                    
+        MDFillRoundFlatButton:
+            id: button_bottom
+            text: ''
+            text_color: [0.1, 0.1, 0.1, 1]
+            font_size: 100
+            roboto: True
+            size_hint: 1, 1
+            on_release: root.switch_time_bottom()
+            border: (2,2,2,2)
+            pos_hint: {'center_x': .5, 'center_y': 0.5}
+            
+
+
+<TimeChangeWindow@MainWindow>:
+    time_top: time_top
+    time_bottom: time_bottom
+    
+    name: 'time_change_window'
+
+    MDBoxLayout:
+        orientation: 'vertical' 
+        md_bg_color: [0.6,0.6,0.6,0.8]
+        
+        MDLabel:
+            id: 'time_window_label'
+            text: 'Set Times'
+            font_size: 40
+            halign: 'center'
+
+        MDLabel:
+            id: 'time_window_directions'
+            text: ' Enter minutes and seconds \n separated by a colon.'
+            font_size: 20
+            haligh: 'left'
+
+        MDLabel:
+            id: invalid_time_message
+            text: ''
+            font_size: 20
+            halign: 'left'
+
+        MDTextField:
+            id: time_top
+            text: ''
+            font_size: 55
+            roboto: True
+            color: 'white'
+            max_text_length: 5
+            size_hint: 1, None
+            multiline: False
+            line_color_normal: 0.2, 0.2, 1, 1
+            pos_hint: {'center_x': 0.5, 'center_y': 0.1}                     
+        
+        MDTextField:
+            id: time_bottom
+            text: ''
+            font_size: 55
+            roboto: True
+            color: 'white'
+            size_hint: 1, None
+            max_text_length: 5
+            multiline: False
+            line_color_normal: 0.2, 0.2, 1, 1
+            pos_hint: {'center_x': 0.5, 'center_y': 0.1}  
+
+        MDBoxLayout:
+            orientation: 'horizontal'
+            
+            MDRaisedButton:
+                id: change_button_bottom
+                text: 'OK'
+                font_size: 30
+                roboto: True
+                size_hint: 0.4, 0.4
+                color: 'white'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                on_release: 
+
+                    root.manager.transition.direction = "left"
+                    root.check_times()
+                    
+                border: (2, 2, 2, 2)
+
+            
+    
+     
+            
